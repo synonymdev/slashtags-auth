@@ -1,0 +1,20 @@
+{
+  "name": "@synonymdev/slashtags-auth",
+  "version": "1.0.0-alpha.0",
+  "type": "module",
+  "scripts": {
+    "test": "brittle test/* -cov",
+    "lint": "standard"
+  },
+  "dependencies": {
+    "@synonymdev/slashtags-rpc": "file:../slashtags/packages/rpc",
+    "@synonymdev/slashtags-url": "file:../slashtags/packages/url",
+    "compact-encoding": "^2.11.0"
+  },
+  "devDependencies": {
+    "@hyperswarm/testnet": "^3.1.0",
+    "@synonymdev/slashtag": "file:../slashtags/packages/slashtag",
+    "brittle": "^3.1.0",
+    "standard": "^17.0.0"
+  }
+}
