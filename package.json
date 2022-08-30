@@ -7,8 +7,8 @@
     "lint": "standard"
   },
   "dependencies": {
-    "@synonymdev/slashtags-rpc": "file:../slashtags/packages/rpc",
-    "@synonymdev/slashtags-url": "file:../slashtags/packages/url",
+    "@synonymdev/slashtags-rpc": "^1.0.0-alpha.0",
+    "@synonymdev/slashtags-url": "^1.0.0-alpha.1",
     "compact-encoding": "^2.11.0"
   },
   "devDependencies": {
