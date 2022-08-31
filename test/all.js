@@ -18,9 +18,9 @@ test('authz', async t => {
     .slice(2, 6)
 
   const server = new auth.Server(alice, {
-    onauthz: (_token, remote) => {
+    onauthz: (_token, remotePublicKey) => {
       st.is(_token, token)
-      st.is(remote.id, bob.id)
+      st.alike(remotePublicKey, bob.key)
       return true
     }
   })
@@ -51,8 +51,8 @@ test('magic link', async t => {
   const magiclink = 'https://www.example.com/user?q=one-time-pass'
 
   const server = new auth.Server(alice, {
-    onmagiclink: remote => {
-      st.is(remote.id, bob.id)
+    onmagiclink: remotePublicKey => {
+      st.alike(remotePublicKey, bob.key)
       return magiclink
     }
   })
@@ -81,7 +81,7 @@ test('missing callback', async t => {
   const client = new auth.Client(bob)
 
   await t.exception(client.magiclink(alice.url), /Magic link not implemented/)
-  // await t.exception(client.authz(alice.url + '?q=foo'), /Authz not implemented/)
+  await t.exception(client.authz(alice.url + '?q=foo'), /Authz not implemented/)
 
   await alice.close()
   await bob.close()
