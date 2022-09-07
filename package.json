@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@hyperswarm/testnet": "^3.1.0",
-    "@synonymdev/slashtag": "^1.0.0-alpha.11",
+    "@synonymdev/slashtag": "^1.0.0-alpha.13",
     "brittle": "^3.1.0",
     "standard": "^17.0.0"
   }
