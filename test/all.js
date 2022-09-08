@@ -21,7 +21,7 @@ test('authz', async t => {
     onauthz: (_token, remotePublicKey) => {
       st.is(_token, token)
       st.alike(remotePublicKey, bob.key)
-      return true
+      return { status: "ok" }
     }
   })
 
@@ -31,9 +31,34 @@ test('authz', async t => {
   const client = new auth.Client(bob)
   const response = await client.authz(url)
 
-  t.ok(response)
+  t.is(response.status, "ok")
 
   await st
+
+  await alice.close()
+  await bob.close()
+})
+
+test('autz - reject', async t => {
+  const testnet = await createTestnet(3, t.teardown)
+
+  const alice = new Slashtag(testnet)
+  const bob = new Slashtag(testnet)
+
+  const server = new auth.Server(alice, {
+    onauthz: () => {
+      return { status: "error", message: "You are blocked"}
+    }
+  })
+
+  const url = server.formatURL()
+  await alice.listen()
+
+  const client = new auth.Client(bob)
+  const response = await client.authz(url)
+
+  t.is(response.status, "error")
+  t.is(response.message, "You are blocked")
 
   await alice.close()
   await bob.close()
