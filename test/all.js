@@ -26,6 +26,7 @@ test('authz', async t => {
   })
 
   const url = server.formatURL(token)
+  t.ok(url.startsWith('slashauth:'))
   await alice.listen()
 
   const client = new auth.Client(bob)
