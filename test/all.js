@@ -52,7 +52,7 @@ test('autz - reject', async t => {
     }
   })
 
-  const url = server.formatURL()
+  const url = server.formatURL('..')
   await alice.listen()
 
   const client = new auth.Client(bob)
@@ -79,7 +79,7 @@ test('magic link', async t => {
   const server = new auth.Server(alice, {
     onmagiclink: remotePublicKey => {
       st.alike(remotePublicKey, bob.key)
-      return magiclink
+      return { url: magiclink, validUntil: 1000000 }
     }
   })
 
@@ -88,7 +88,8 @@ test('magic link', async t => {
   const client = new auth.Client(bob)
   const response = await client.magiclink(alice.url)
 
-  t.is(response, magiclink)
+  t.is(response.url, magiclink)
+  t.is(response.validUntil, 1000000)
 
   await alice.close()
   await bob.close()
