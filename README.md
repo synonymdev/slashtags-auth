@@ -57,18 +57,18 @@ const link =  client.magiclik(url)
 
 #### authz
 
-1- `Server` announces its IP and port on Hyperswarm `DHT`.
-2- `Server` formats its publicKey as `slashauth:<zbase32 publicKey>?q=<token>`
+1. `Server` announces its IP and port on Hyperswarm `DHT`.
+2. `Server` formats its publicKey as `slashauth:<zbase32 publicKey>?q=<token>`
     where `token` is an represents either a session id, or client id or any internal
     identification of the `Client` it should send requested resources to.
-3- `Client` shows the url as a QR code to the `Wallet`.
-4- `Wallet` parses the url and optain the `Server`'s publicKey and client token.
-5- `Wallet` queries the DHT for the `Server`'s IP and port using its public key.
-6- `Wallet` establishes a secure connection with thes `Server`, confirming its publicKey,
+3. `Client` shows the url as a QR code to the `Wallet`.
+4. `Wallet` parses the url and optain the `Server`'s publicKey and client token.
+5. `Wallet` queries the DHT for the `Server`'s IP and port using its public key.
+6. `Wallet` establishes a secure connection with thes `Server`, confirming its publicKey,
     and pass the `token` to auhtorize the `Client`.
-7- `Server` verifies the token, and confirms the success to the client.
+7. `Server` verifies the token, and confirms the success to the client.
     In parallel, the server now knows the `Wallet` publicKey and can save it in its users table / collection.
-8- Finally `Server` grants `Client` the requested resources started a logged in session.
+8. Finally `Server` grants `Client` the requested resources started a logged in session.
 
 ```
 +-----------+   +-----------+   +-----------+   +-----------+       
@@ -110,10 +110,10 @@ const link =  client.magiclik(url)
 
 Magiclink functionality helps wallets get a one-time passwordless link to login to a website, that it previously authenticated to.
 
-1- `Wallet` queries the `DHT` for the current IP and port number for the server's publicKey.
-2- `Wallet` connects to the `Server` and requests a magic link.
-3- `Server` compares the publicKey the request is coming form, with its internal DB.
-4- If the `Server` gants the request, it will respond with a one-time link that `Wallet` can use to redirect the user to an already logged in session in browser.
+1. `Wallet` queries the `DHT` for the current IP and port number for the server's publicKey.
+2. `Wallet` connects to the `Server` and requests a magic link.
+3. `Server` compares the publicKey the request is coming form, with its internal DB.
+4. If the `Server` gants the request, it will respond with a one-time link that `Wallet` can use to redirect the user to an already logged in session in browser.
 
 ```
 +-----------+   +-----------+               +-----------+                    
