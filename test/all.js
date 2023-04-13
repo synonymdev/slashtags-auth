@@ -21,7 +21,7 @@ test('authz', async t => {
     onauthz: (_token, remotePublicKey) => {
       st.is(_token, token)
       st.alike(remotePublicKey, bob.key)
-      return { status: 'ok' }
+      return { status: 'ok', resources: [] }
     }
   })
 
@@ -59,7 +59,9 @@ test('autz - reject', async t => {
   const response = await client.authz(url)
 
   t.is(response.status, 'error')
-  t.is(response.message, 'You are blocked')
+  if (response.status === 'error') {
+    t.is(response.message, 'You are blocked')
+  }
 
   await alice.close()
   await bob.close()
@@ -165,7 +167,9 @@ test('authz - with account feed url', async t => {
   const response = await client.authz(url)
 
   t.is(response.status, 'ok')
-  t.is(response.resources[0], accountFeedUrl)
+  if (response.status === 'ok') {
+    t.is(response.resources[0], accountFeedUrl)
+  }
 
   await st
 

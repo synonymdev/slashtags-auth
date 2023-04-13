@@ -22,8 +22,8 @@ const slashtag = sdk.slashtag()
 
 const server = new Server(slashtag, {
     onauthz: (token, remote) => {
-        // Check that token is valid, and remote isn't blocked
-        return true
+      // Check that token is valid, and remote isn't blocked
+      return { status: 'ok', resources: [] }
     },
     onmagiclink: (remote) => {
         return 'https://www.example.com?q=foobar'
