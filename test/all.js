@@ -152,7 +152,7 @@ test('authz - with account feed url', async t => {
       st.alike(remotePublicKey, bob.key)
       return {
         status: 'ok',
-        feed: accountFeedUrl
+        resources: [accountFeedUrl]
       }
     }
   })
@@ -165,7 +165,7 @@ test('authz - with account feed url', async t => {
   const response = await client.authz(url)
 
   t.is(response.status, 'ok')
-  t.is(response.feed, accountFeedUrl)
+  t.is(response.resources[0], accountFeedUrl)
 
   await st
 
