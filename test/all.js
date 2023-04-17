@@ -21,7 +21,7 @@ test('authz', async t => {
     onauthz: (_token, remotePublicKey) => {
       st.is(_token, token)
       st.alike(remotePublicKey, bob.key)
-      return { status: 'ok' }
+      return { status: 'ok', resources: [] }
     }
   })
 
@@ -59,7 +59,9 @@ test('autz - reject', async t => {
   const response = await client.authz(url)
 
   t.is(response.status, 'error')
-  t.is(response.message, 'You are blocked')
+  if (response.status === 'error') {
+    t.is(response.message, 'You are blocked')
+  }
 
   await alice.close()
   await bob.close()
@@ -126,6 +128,50 @@ test('authz - missing token', async t => {
 
   const client = new auth.Client(bob)
   await t.exception(client.authz(alice.url), /Missing token in slashauth url/)
+
+  await alice.close()
+  await bob.close()
+})
+
+test('authz - with account feed url', async t => {
+  const testnet = await createTestnet(3, t.teardown)
+
+  const alice = new Slashtag(testnet)
+  const bob = new Slashtag(testnet)
+
+  const st = t.test('auth')
+  st.plan(2)
+
+  const token = Math.random()
+    .toString(16)
+    .slice(2, 6)
+
+  const accountFeedUrl = 'slashfeed:foobar?encryptionKey=42'
+
+  const server = new auth.Server(alice, {
+    onauthz: (_token, remotePublicKey) => {
+      st.is(_token, token)
+      st.alike(remotePublicKey, bob.key)
+      return {
+        status: 'ok',
+        resources: [accountFeedUrl]
+      }
+    }
+  })
+
+  const url = server.formatURL(token)
+  t.ok(url.startsWith('slashauth:'))
+  await alice.listen()
+
+  const client = new auth.Client(bob)
+  const response = await client.authz(url)
+
+  t.is(response.status, 'ok')
+  if (response.status === 'ok') {
+    t.is(response.resources[0], accountFeedUrl)
+  }
+
+  await st
 
   await alice.close()
   await bob.close()
